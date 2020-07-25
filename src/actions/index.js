@@ -18,3 +18,20 @@ export const getGenres = () => async dispatch => {
     payload: res.data,
   });
 };
+
+export const setHeader = title => {
+  return {
+    type: TYPES.SET_HEADER,
+    payload: title,
+  };
+};
+
+// Get single movie
+export const getMovie = id => async dispatch => {
+  const res = await tmdbAPI.get(`/movie/${id}`);
+  dispatch({
+    type: TYPES.FETCH_MOVIE,
+    payload: res.data,
+  });
+  return res.data;
+};
