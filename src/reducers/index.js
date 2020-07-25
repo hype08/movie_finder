@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
+import configReducer from './configReducer';
 
 export default combineReducers({
-  test: () => '123',
+  config: configReducer,
 });
