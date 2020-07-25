@@ -1,30 +1,34 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import SearchBar from './SearchBar';
 
 const Wrapper = styled.div`
   display: flex;
-  padding: 1rem 2rem;
-  height: 6rem;
-  background-color: #444;
+  padding: 1rem;
   align-items: center;
-  color: #fff;
+  color: var(--color-primary);
 `;
 
 const Title = styled.h1`
-  font-size: 2rem;
-  font-weight: 500;
+  font-size: 2.2rem;
+  font-weight: 700;
   margin-right: auto;
+  letter-spacing: -0.5px;
 `;
 
-const Header = () => {
+const Header = ({ header }) => {
   return (
     <Wrapper>
-      <Title>Title</Title>
+      <Title>{header}</Title>
       <SearchBar />
     </Wrapper>
   );
 };
 
-export default Header;
+const mapStateToProps = ({ general }) => {
+  return { header: general.header };
+};
+
+export default connect(mapStateToProps)(Header);
