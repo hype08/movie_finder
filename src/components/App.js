@@ -1,10 +1,18 @@
 import React, { useEffect } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
+import { Router, Switch, Route } from 'react-router-dom';
+import history from '../history';
 import { connect } from 'react-redux';
-import { getConfig } from '../actions';
+import { getConfig, getGenres } from '../actions';
 
 import Sidebar from './sidebar/Sidebar';
 import Header from './header/Header';
+import Home from './Home';
+import Genre from './movies/Genre';
+import Discover from './movies/Discover';
+import Search from './movies/Search';
+import Movie from './singleMovie/Movie';
+import NotFound from './NotFound';
 
 const GlobalStyle = createGlobalStyle`
 * {
@@ -16,6 +24,8 @@ const GlobalStyle = createGlobalStyle`
 *::before,
 *::after {
   box-sizing: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html {
@@ -24,7 +34,7 @@ html {
 }
 
 body {
-  @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700');
+  @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700');
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
   line-height: 1.6;
@@ -33,33 +43,57 @@ body {
 
 const MainWrapper = styled.div`
   display: flex;
+  --color-primary-dark: #263238;
+  --color-primary: #37474f;
+  --color-primary-light: #546e7a;
+  --color-primary-lighter: #b0bec5;
+  --text-color: #fafafa;
+  --link-color: #444;
+  --border-color: rgba(176, 190, 197, 0.5);
+  --shadow-color: rgba(0, 0, 0, 0.15);
 `;
 
 const ContentWrapper = styled.div`
   width: 100%;
+  padding: 2rem 4rem;
 `;
 
 const App = props => {
   useEffect(() => {
     props.getConfig();
+    props.getGenres();
   }, []);
 
-  return (
-    <React.Fragment>
-      <GlobalStyle />
-      <MainWrapper>
-        <Sidebar />
-        <ContentWrapper>
-          <Header />
-        </ContentWrapper>
-      </MainWrapper>
-    </React.Fragment>
+  return props.base && props.genres ? (
+    <Router history={history}>
+      <React.Fragment>
+        <GlobalStyle />
+        <MainWrapper>
+          <Sidebar />
+          <ContentWrapper>
+            <Header />
+            <Switch>
+              <Route path="/" exact component={Home} />
+              <Route path="/genres/:name" exact component={Genre} />
+              <Route path="/discover/:name" exact component={Discover} />
+              <Route path="/search/:query" exact component={Search} />
+              <Route path="/movie/:id" exact component={Movie} />
+              <Route component={NotFound} />
+            </Switch>
+          </ContentWrapper>
+        </MainWrapper>
+      </React.Fragment>
+    </Router>
+  ) : (
+    <div>Loading</div>
   );
 };
 
+const mapStateToProps = ({ general }) => {
+  return { base: general.base, genres: general.genres };
+};
+
 export default connect(
-  null,
-  {
-    getConfig,
-  }
+  mapStateToProps,
+  { getConfig, getGenres }
 )(App);
