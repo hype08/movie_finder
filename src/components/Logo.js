@@ -1,27 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilm } from '@fortawesome/free-solid-svg-icons';
-
-const LogoWrapper = styled(FontAwesomeIcon)`
-  display: flex;
-  margin: 0 auto;
-  font-size: 6rem;
-  text-transform: uppercase;
-  color: var(--color-primary);
-`;
+import LogoSvg from '../svg/logo.svg';
 
 const LinkWrapper = styled(Link)`
   width: 100%;
+  height: 18rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-decoration: none;
-  padding: 2rem 3rem;
+  margin-bottom: 2rem;
+`;
+
+const LogoWrapper = styled.img`
+  max-width: 75%;
 `;
 
 const Logo = () => {
   return (
-    <LinkWrapper to="/">
-      <LogoWrapper icon={faFilm} />
+    <LinkWrapper to={process.env.PUBLIC_URL + '/'}>
+      <LogoWrapper src={LogoSvg} />
     </LinkWrapper>
   );
 };
