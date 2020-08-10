@@ -157,8 +157,8 @@ const App = ({ init, isLoading }) => {
   );
 };
 
-const mapStateToProps = ({ geral }) => {
-  return { isLoading: geral.loading };
+const mapStateToProps = ({ general }) => {
+  return { isLoading: general.loading };
 };
 
 export default connect(

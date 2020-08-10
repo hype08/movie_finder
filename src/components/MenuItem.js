@@ -1,37 +1,41 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCalendar,
-  faPoll,
-  faHeart,
-  faDotCircle,
-} from '@fortawesome/free-solid-svg-icons';
 
 const StyledItem = styled.div`
-  padding: 0.5rem 2rem;
-  font-weight: 600;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
   font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1;
   opacity: ${props => (props.selected ? '1' : '.6')};
-  color: ${props =>
-    props.selected
-      ? 'var(--color-primary-dark)'
-      : 'var(--color-primary-light)'};
+  color: ${props => {
+    if (props.mobile) {
+      if (props.selected) {
+        return 'var(--text-color)';
+      }
+      return 'rgba(255, 255, 255, .7)';
+    } else {
+      if (props.selected) {
+        return 'var(--color-primary-dark)';
+      }
+      return 'var(--color-primary-light)';
+    }
+  }};
   border-color: ${props =>
     props.selected
       ? 'var(--color-primary-dark)'
       : 'var(--color-primary-light)'};
   border: ${props => (props.selected ? '1px solid' : '1px solid transparent')};
   border-radius: 2rem;
-  display: flex;
-  align-items: center;
   text-decoration: none;
-  width: 100%;
   cursor: pointer;
-  transition: color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  transition: all 100ms cubic-bezier(0.075, 0.82, 0.165, 1);
 
-  :not(:last-child) {
-    margin-bottom: 1rem;
+  &:not(:last-child) {
+    margin-bottom: 3rem;
   }
 
   &:hover {
@@ -42,19 +46,19 @@ const StyledItem = styled.div`
 function renderIcon(title) {
   switch (title) {
     case 'Popular':
-      return faHeart;
+      return 'heart';
     case 'Top Rated':
-      return faPoll;
+      return 'poll';
     case 'Upcoming':
-      return faCalendar;
+      return 'calendar';
     default:
-      return faDotCircle;
+      return 'dot-circle';
   }
 }
 
-const MenuItem = ({ title, selected }) => {
+const MenuItem = ({ title, selected, mobile }) => {
   return (
-    <StyledItem selected={selected}>
+    <StyledItem selected={selected} mobile={mobile}>
       <FontAwesomeIcon
         icon={renderIcon(title)}
         size="1x"
