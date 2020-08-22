@@ -1,35 +1,79 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
-const Pagination = ({ movies }) => {
+import Button from './Button';
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: ${props => {
+    if (props.type === 'one') {
+      return 'flex-start';
+    } else if (props.type === 'both') {
+      return 'space-between';
+    } else {
+      return 'flex-end';
+    }
+  }};
+`;
+
+const WrapperLink = styled(Link)`
+  text-decoration: none;
+`;
+
+const Pagination = ({ movies, scrollToMyRef }) => {
   const { page, total_pages } = movies;
+  // If only 1 page
+  if (total_pages === 1) {
+    return null;
+  }
 
   // On first page, render page 2 button
   if (page < total_pages && page === 1) {
     return (
-      <div>
-        <Link to={`?page=${page + 1}`}>Page {page + 1}</Link>
-      </div>
+      <Wrapper>
+        <WrapperLink
+          to={`${process.env.PUBLIC_URL}?page=${page + 1}`}
+          onClick={() => scrollToMyRef()}
+        >
+          <Button solid title={`Page ${page + 1}`} icon="arrow-right" />
+        </WrapperLink>
+      </Wrapper>
     );
   }
 
   // There is a next and a previous page, render accordingly
   else if (page < total_pages) {
     return (
-      <div>
-        <Link to={`?page=${page - 1}`}>Page {page - 1}</Link>
-        <Link to={`?page=${page + 1}`}>Page {page + 1}</Link>
-      </div>
+      <Wrapper type="both">
+        <WrapperLink
+          to={`${process.env.PUBLIC_URL}?page=${page - 1}`}
+          onClick={() => scrollToMyRef()}
+        >
+          <Button solid left title={`Page ${page - 1}`} icon="arrow-left" />
+        </WrapperLink>
+        <WrapperLink
+          to={`${process.env.PUBLIC_URL}?page=${page + 1}`}
+          onClick={() => scrollToMyRef()}
+        >
+          <Button solid title={`Page ${page + 1}`} icon="arrow-right" />
+        </WrapperLink>
+      </Wrapper>
     );
   }
 
   // Otherwise on last page of results
   else {
     return (
-      <div>
-        <Link to={`?page=${page - 1}`}>Page {page - 1}</Link>
-      </div>
+      <Wrapper type="one">
+        <WrapperLink
+          to={`${process.env.PUBLIC_URL}?page=${page - 1}`}
+          onClick={() => scrollToMyRef()}
+        >
+          <Button solid left title={`Page ${page - 1}`} icon="arrow-left" />
+        </WrapperLink>
+      </Wrapper>
     );
   }
 };
